@@ -8,6 +8,9 @@ import android.widget.Toast
 import android.view.View
 import android.widget.TextView
 import kotlin.math.abs
+import android.util.Log
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,9 +31,9 @@ class MainActivity : AppCompatActivity() {
 
     private var currentIndex = 0
 
-    private var prevIndex = currentIndex - 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
         trueButton = findViewById(R.id.true_button)
@@ -61,14 +64,47 @@ class MainActivity : AppCompatActivity() {
         }
 
         previousButton.setOnClickListener{
-            currentIndex = (currentIndex - 1) % questionBank.size
+            if (currentIndex > 0){
+                currentIndex = currentIndex - 1
+            } else {
+                currentIndex = 5
+            }
+
             updateQuestion()
         }
+
+
 
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
 
+    override fun onStart(){
+        super.onStart()
+        Log.d(TAG,"onStart() called")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause() called")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy() called")
+    }
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
