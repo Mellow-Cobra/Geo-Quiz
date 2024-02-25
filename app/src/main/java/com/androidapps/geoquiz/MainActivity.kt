@@ -7,12 +7,14 @@ import android.widget.Button
 import android.widget.Toast
 import android.view.View
 import android.widget.TextView
+import kotlin.math.abs
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var previousButton: Button
     private lateinit var questionTextView: TextView
 
     private val questionBank = listOf(
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var currentIndex = 0
+
+    private var prevIndex = currentIndex - 1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -33,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         questionTextView = findViewById(R.id.question_text_view)
+        previousButton = findViewById(R.id.previous_button)
 
         trueButton.setOnClickListener{ view: View ->
             checkAnswer(true)
@@ -48,6 +53,18 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
+
+
+        questionTextView.setOnClickListener{
+            currentIndex = (currentIndex + 1) % questionBank.size
+            updateQuestion()
+        }
+
+        previousButton.setOnClickListener{
+            currentIndex = (currentIndex - 1) % questionBank.size
+            updateQuestion()
+        }
+
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
@@ -56,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
+
 
     private fun checkAnswer(userAnswer: Boolean){
         val correctAnswer = questionBank[currentIndex].answer
