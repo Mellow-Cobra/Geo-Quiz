@@ -7,12 +7,17 @@ import android.widget.Button
 import android.widget.Toast
 import android.view.View
 import android.widget.TextView
+import kotlin.math.abs
+import android.util.Log
+
+private const val TAG = "MainActivity"
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var trueButton: Button
     private lateinit var falseButton: Button
     private lateinit var nextButton: Button
+    private lateinit var previousButton: Button
     private lateinit var questionTextView: TextView
 
     private val questionBank = listOf(
@@ -25,14 +30,17 @@ class MainActivity : AppCompatActivity() {
     )
 
     private var currentIndex = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate(Bundle?) called")
         setContentView(R.layout.activity_main)
 
         trueButton = findViewById(R.id.true_button)
         falseButton = findViewById(R.id.false_button)
         nextButton = findViewById(R.id.next_button)
         questionTextView = findViewById(R.id.question_text_view)
+        previousButton = findViewById(R.id.previous_button)
 
         trueButton.setOnClickListener{ view: View ->
             checkAnswer(true)
@@ -48,14 +56,60 @@ class MainActivity : AppCompatActivity() {
             updateQuestion()
         }
 
+
+
+        questionTextView.setOnClickListener{
+            currentIndex = (currentIndex + 1) % questionBank.size
+            updateQuestion()
+        }
+
+        previousButton.setOnClickListener{
+            if (currentIndex > 0){
+                currentIndex = currentIndex - 1
+            } else {
+                currentIndex = 5
+            }
+
+            updateQuestion()
+        }
+
+
+
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
 
+    override fun onStart(){
+        super.onStart()
+        Log.d(TAG,"onStart() called")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "onResume() called")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "onPause() called")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "onStop() called")
+
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(TAG, "onDestroy() called")
+    }
     private fun updateQuestion() {
         val questionTextResId = questionBank[currentIndex].textResId
         questionTextView.setText(questionTextResId)
     }
+
 
     private fun checkAnswer(userAnswer: Boolean){
         val correctAnswer = questionBank[currentIndex].answer
